@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_add_task_dialog_task"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text" >
+
+            <requestFocus />
+        </EditText>
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/checkSun"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sun" />
+
+        <CheckBox
+            android:id="@+id/checkMon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mon" />
+
+        <CheckBox
+            android:id="@+id/checkTue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tue" />
+
+        <CheckBox
+            android:id="@+id/checkWed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wed" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <CheckBox
+            android:id="@+id/checkThu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thu" />
+
+        <CheckBox
+            android:id="@+id/checkFri"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fri" />
+        <CheckBox
+            android:id="@+id/checkSat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sat" />
+    </TableRow>
+
+    <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+	     <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Date"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+	     
+	     <!-- 
+	     <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+	     -->
+	     
+	     <EditText
+            android:id="@+id/edit_add_task_dialog_start_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:editable="false"
+            android:inputType="text" />
+
+	     <ImageView
+	         android:id="@+id/imageView1"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:src="@android:drawable/ic_menu_today" />
+         
+    </TableRow>
+    
+     <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+	     <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Date"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+	     
+	     <EditText
+            android:id="@+id/edit_add_task_dialog_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text" />
+	    
+	     <!-- 
+	      <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+             -->
+	      <ImageView
+	         android:id="@+id/imageView1"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:src="@android:drawable/ic_menu_today" />
+    </TableRow>
+
+     <TabHost
+         android:id="@android:id/tabhost"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent" >
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical" >
+
+             <TabWidget
+                 android:id="@android:id/tabs"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" >
+             </TabWidget>
+
+             <FrameLayout
+                 android:id="@android:id/tabcontent"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent" >
+
+                 <LinearLayout
+                     android:id="@+id/tab1"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent" >
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/tab2"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent" >
+                 </LinearLayout>
+
+                 <LinearLayout
+                     android:id="@+id/tab3"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent" >
+                 </LinearLayout>
+             </FrameLayout>
+         </LinearLayout>
+     </TabHost>
+
+</TableLayout>

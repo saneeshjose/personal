@@ -1,0 +1,117 @@
+package com.sj.cloudtodo.views;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.sj.cloudtodo.R;
+import com.sj.cloudtodo.common.CloudTodo;
+import com.sj.cloudtodo.db.DataStore;
+import com.sj.cloudtodo.model.Task;
+
+public class TaskDetailActivity extends FragmentActivity implements OnDateSetListener {
+	
+	private Task task;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		setContentView(R.layout.activity_task_detail);
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+
+			task = (Task) extras.get("task");
+			if (task == null)
+				return;
+			
+			TextView txtTask = (TextView ) findViewById(R.id.editTask);
+			txtTask.setText(task.getTask());
+		}
+		else
+			Log.e("CloudTodo", "No extras..");
+		
+		Spinner spinnerFrequency = ( Spinner ) findViewById(R.id.spnFrequency);
+		
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeat_frequencies, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerFrequency.setAdapter(adapter);
+		
+		EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
+		if ( task.getDueDate()!=null) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			textDueDate.setText(dateFormat.format(task.getDueDate()) );
+		}
+		
+		textDueDate.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Date today = new Date();
+				
+				DatePickerDialog d = new DatePickerDialog(TaskDetailActivity.this, TaskDetailActivity.this, 1900+ today.getYear(), today.getMonth(), today.getDate());
+				d.show();
+			}
+		});
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_activity_task_detail, menu);
+        return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if ( item.getItemId() == R.id.menu_activity_task_detail_save ) {
+			
+			EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
+			
+			try{
+				Date date = CloudTodo.stringToDate(textDueDate.getText().toString());
+				task.setDueDate(date);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			EditText textTask = (EditText) findViewById(R.id.editTask);
+			task.setTask(textTask.getText().toString());
+			
+			DataStore dataStore = new DataStore(this);
+			dataStore.updateTask(task);
+			Intent data = new Intent();
+			data.putExtra("task", task);
+			setResult(RESULT_OK, data);
+			finish();
+		}
+		return true;
+		
+	}
+	
+	@Override
+	public void onDateSet(DatePicker view, int year, int monthOfYear,
+			int dayOfMonth) {
+		EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
+		String date = String.format("%d-%02d-%02d",year,  (1+monthOfYear), dayOfMonth );
+		textDueDate.setText(date);
+	}
+	
+}

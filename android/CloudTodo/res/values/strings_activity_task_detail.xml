@@ -1,0 +1,7 @@
+<resources>
+    <string name="str_add_task_dialog_title">Add Task</string>
+    <string name="str_add_task_dialog_ok">OK</string>
+    <string name="str_add_task_dialog_cancel">Cancel</string>
+    <string name="str_add_task_dialog_task">Task</string>
+     <string name="str_activity_task_detail_save">Save</string>
+</resources>

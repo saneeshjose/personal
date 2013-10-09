@@ -1,0 +1,13 @@
+<resources>
+    <string name="str_activity_task_detail_repeats">Repeats</string>
+    <string-array name="repeat_frequencies">
+        <item>None</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+    <string name="str_activity_task_detail_start_date">Due Date</string>
+    <string name="str_activity_task_detail_end_date">End Date</string>
+    <string name="str_activity_task_detail_time">Time</string>
+</resources>
