@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuBuy" android:title="Buy"></item>
+    <item android:id="@+id/mnuSell" android:title="Sell"></item>
+</menu>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, StocksActivity!</string>
+    <string name="app_name">WellPoint</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="signin">Sign In</string>
+    <string name="register">Register</string>
+    <string name="forgot_pwd">Forgot Password?</string>
+    <string name="register_fullname">Full Name</string>
+    <string name="register_email">E-Mail ID</string>
+    <string name="register_password">Password</string>
+    <string name="register_c_password">Confirm Password</string>
+    <string name="register_ssn">SSN</string>
+    <string name="register_subscriber_id">Subscriber ID</string>
+    <string name="register_btn_signup">Sign Up</string>
+    
+    <string name="home_my_policy">My Policy</string>
+    <string name="home_my_claims">My Claims</string>
+    <string name="home_find_provider">Find Provider</string>
+    <string name="home_contact">Contact Us</string>
+    <string name="home_about">About Us</string>
+    <string name="home_call">Call Us</string>
+    
+    <string name="home_call_number">1-800-9000-1111</string>
+    
+</resources>

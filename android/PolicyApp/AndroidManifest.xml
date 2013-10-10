@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.personal.policy"
+      android:versionCode="1"
+      android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="7" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:name=".ui.views.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".ui.views.RegistrationActivity" android:label="Sign Up"/>
+        <activity android:name=".ui.views.HomeActivity" android:label="Home"/>
+        <activity android:name=".ui.views.MyPolicyActivity" android:label="My Policy"/>
+        <activity android:name=".ui.views.MyClaimsActivity" android:label="My Claims"/>
+        <activity android:name=".ui.views.FindProviderActivity" android:label="Find Provider"/>
+        <activity android:name=".ui.views.ClaimDetailActivity" android:label="Claims for Dependent"/>
+        <activity android:name=".ui.views.TaskListActivity" android:label="Claims for Dependent"/>
+        
+        
+        
+    </application>
+</manifest>

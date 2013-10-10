@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+	<!--  Servlets -->
+	<servlet>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value/>
+		</init-param>
+	</servlet>
+	<servlet>
+		<servlet-name>WellPointWeb</servlet-name>
+		<servlet-class>com.personal.policy.web.WellPointWebServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>UserManagementServlet</servlet-name>
+		<servlet-class>com.personal.policy.web.UserManagementServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>PolicyManagementServlet</servlet-name>
+		<servlet-class>com.personal.policy.web.PolicyManagementServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ProviderManagementServlet</servlet-name>
+		<servlet-class>com.personal.policy.web.ProviderManagementServlet</servlet-class>
+	</servlet>
+	
+	<!--  Servlet Mappings -->
+	<servlet-mapping>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PolicyManagementServlet</servlet-name>
+		<url-pattern>/policymanagement</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UserManagementServlet</servlet-name>
+		<url-pattern>/usermanagement</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>WellPointWeb</servlet-name>
+		<url-pattern>/wellpointweb</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProviderManagementServlet</servlet-name>
+		<url-pattern>/providermanagement</url-pattern>
+	</servlet-mapping>
+	
+
+	<!-- Services -->
+	<servlet>
+		<servlet-name>AuthService</servlet-name>
+		<servlet-class>com.personal.policy.web.services.AuthService</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>PolicyService</servlet-name>
+		<servlet-class>com.personal.policy.web.services.PolicyService</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ProviderService</servlet-name>
+		<servlet-class>com.personal.policy.web.services.ProviderService</servlet-class>
+	</servlet>
+
+	<!-- Services Mapping -->
+	<servlet-mapping>
+		<servlet-name>AuthService</servlet-name>
+		<url-pattern>/services/auth</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PolicyService</servlet-name>
+		<url-pattern>/services/policy</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProviderService</servlet-name>
+		<url-pattern>/services/provider</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>

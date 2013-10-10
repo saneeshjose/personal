@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="provider_name">Provider Name</string>
+    <string name="provider_location">Provider Location</string>
+    <string name="provider_search_btn">Search</string>
+     <string name="provider_search_results">Providers</string>
+</resources>

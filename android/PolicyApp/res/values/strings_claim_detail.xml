@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="claim_detail_date">Date</string>
+    <string name="claim_detail_amount">Amount</string>
+    <string name="claim_detail_status">Status</string>
+    <string name="claim_detail_approved_amount">Approved Amount</string>
+</resources>
