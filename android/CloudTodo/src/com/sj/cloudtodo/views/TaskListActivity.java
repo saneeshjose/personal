@@ -10,11 +10,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -30,8 +34,7 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 	
 	private List<Task> tasks;
 	private TasksListAdapter adapter ;
-	
-	private int REQUEST_MODIFY_TASK_DETAIL = 1001;
+	private ListView list;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +44,11 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 		adapter = new TasksListAdapter(this, R.layout.list_item_tasks, tasks);
 		
 		setContentView(R.layout.activity_task_list);
+		getActionBar().setDisplayShowHomeEnabled(false);
 		
-		ListView list = (ListView) findViewById(R.id.list_tasks);
+		list = (ListView) findViewById(R.id.list_tasks);
         list.setAdapter( adapter );
+        registerForContextMenu(list);
         
         list.setOnItemClickListener( new OnItemClickListener() {
         	@Override
@@ -55,7 +60,7 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
         				TaskDetailActivity.class);
 				i.putExtra("task", t);
 
-				startActivityForResult( i, REQUEST_MODIFY_TASK_DETAIL);
+				startActivity(i);
         	}
 		});
         
@@ -159,20 +164,40 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 		else if ( "Tomorrow".equalsIgnoreCase(strings[selectedFilter]) ) {
 			tasks.addAll(d.getTasksDueTomorrow());
 		}
+		else if ( "Unplanned".equalsIgnoreCase(strings[selectedFilter]) ) {
+			tasks.addAll(d.getTasksDueTomorrow());
+		}
 		
 		adapter.notifyDataSetChanged();
 	}
 	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context_menu_activity_task_list, menu);
+	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public boolean onContextItemSelected(MenuItem item) {
 		
-		if ( requestCode == REQUEST_MODIFY_TASK_DETAIL ) {
-			if ( resultCode == RESULT_OK ) {
-				DataStore d = new DataStore(this);
-				Task task = (Task ) data.getExtras().get("task");
-				d.updateTask(task);
-			}
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		
+		switch ( item.getItemId()) {
+		
+		case R.id.menu_context_activity_tasklist_delete :
+			DataStore d = new DataStore(this);
+			Task task = (Task)list.getItemAtPosition(info.position);
+			d.deleteTask(task);
+			tasks.remove(task);
+			adapter.notifyDataSetChanged();
+			
+			return true;
+
+		default:
+			return super.onContextItemSelected(item);
 		}
 	}
 }

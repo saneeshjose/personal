@@ -4,11 +4,6 @@
         android:icon="@android:drawable/ic_input_add"
         android:showAsAction="always|withText"
         />
-    <item android:id="@+id/menu_activity_tasks_delete"
-        android:title="@string/str_activity_tasks_delete"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:showAsAction="always|withText"
-        />
     <item android:id="@+id/menu_activity_tasks_sync"
         android:title="@string/str_activity_tasks_sync"
         android:icon="@drawable/navigation_refresh"

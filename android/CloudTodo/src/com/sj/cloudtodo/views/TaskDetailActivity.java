@@ -5,7 +5,6 @@ import java.util.Date;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -30,7 +29,7 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_task_detail);
@@ -97,9 +96,11 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 			
 			DataStore dataStore = new DataStore(this);
 			dataStore.updateTask(task);
-			Intent data = new Intent();
-			data.putExtra("task", task);
-			setResult(RESULT_OK, data);
+			finish();
+		}
+		else if ( item.getItemId() == R.id.menu_activity_task_detail_delete ) {
+			DataStore dataStore = new DataStore(this);
+			dataStore.deleteTask(task);
 			finish();
 		}
 		return true;

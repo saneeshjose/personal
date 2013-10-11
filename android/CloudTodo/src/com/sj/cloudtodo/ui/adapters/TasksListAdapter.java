@@ -28,7 +28,6 @@ public class TasksListAdapter extends ArrayAdapter<Task> {
 		LayoutInflater inflator = (LayoutInflater) getContext().getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
 		View v = convertView;
-		final int p = position;
 		
 		if ( v == null ) v = inflator.inflate(R.layout.list_item_tasks, null);
 		

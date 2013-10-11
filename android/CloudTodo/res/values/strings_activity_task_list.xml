@@ -3,11 +3,13 @@
     <string name="str_activity_tasks_title">Define Steps</string>
     <string name="str_activity_tasks_add">Add Task</string>
     <string name="str_activity_tasks_sync">Sync</string>
-    <string name="str_activity_tasks_delete">Delete</string>
+    <string name="str_context_menu_activity_tasklist_delete">Delete Task</string>
+    <string name="str_context_menu_activity_tasklist_tomorrow">Move to tomorrow</string>
     
     <string-array name="action_list">
         <item>Today</item>
         <item>Tomorrow</item>
+        <item>Unplanned</item>
         <item>All</item>
     </string-array>
 

@@ -197,7 +197,12 @@ public class DataStore {
 		db.close();
 	}
 	
-	public void deleteTasks( List<Task> taskList) {
+	public void deleteTask( Task task) {
 		
+		String sql = "DELETE FROM CLOUDTODO_TASKS WHERE ID=" + task.getId();
+		
+		SQLiteDatabase db = helper.getWritableDatabase();
+		db.execSQL(sql);
+		db.close();
 	}
 }
