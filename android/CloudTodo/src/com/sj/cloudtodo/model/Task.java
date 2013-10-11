@@ -3,6 +3,8 @@ package com.sj.cloudtodo.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.sj.cloudtodo.common.CloudTodo;
+
 public class Task implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -14,6 +16,8 @@ public class Task implements Serializable {
 	private boolean recurring;
 	private int status;
 	private String task;
+	public static final int STATUS_COMPLETE=1;
+	public static final int STATUS_INCOMPLETE=0;
 	
 	public Date getDueDate() {
 		return dueDate;
@@ -40,7 +44,7 @@ public class Task implements Serializable {
 	}
 
 	public boolean isComplete() {
-		return status==1;
+		return status==STATUS_COMPLETE;
 	}
 
 	public boolean isRecurring() {
@@ -73,6 +77,26 @@ public class Task implements Serializable {
 	
 	public void setTask(String task) {
 		this.task = task;
+	}
+	
+	public boolean isOverDue() {
+		
+		if ( dueDate == null )
+			return false;
+		try{
+			//Remove date portion to enable comparison
+			Date today = CloudTodo.stringToDate( CloudTodo.dateToString(new Date()) );
+			
+			if ( (status!=1) && (dueDate.compareTo(today)<0)  ) {
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	public String toString() {

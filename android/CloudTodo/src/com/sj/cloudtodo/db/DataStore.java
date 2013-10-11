@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.sj.cloudtodo.common.CloudTodo;
 import com.sj.cloudtodo.model.Task;
@@ -78,9 +79,111 @@ public class DataStore {
 		db.close();
 	}
 	
+	public List<Task> getAllTasks() {
+		
+		Log.i(CloudTodo.tag, "getAllTasks");
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , null, null, null, null, null );
+		
+		List<Task> taskList = resultSetToTaskList(c);
+		
+		c.close();
+		db.close();
+		return taskList;
+	}
+	
+	public List<Task> getTasksDueToday() {
+		
+		Log.i(CloudTodo.tag, "getTasksDueToday");
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\')", null, null, null, null );
+		
+		List<Task> taskList = resultSetToTaskList(c);
+		
+		c.close();
+		db.close();
+		return taskList;
+	}
+	
+	public List<Task> getTasksDueTomorrow() {
+		
+		Log.i(CloudTodo.tag, "getTasksDueTomorrow");
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, null );
+		
+		List<Task> taskList = resultSetToTaskList(c);
+		
+		c.close();
+		db.close();
+		return taskList;
+	}
+	
+	public List<Task> getTasksOverDue() {
+		
+		Log.i(CloudTodo.tag, "getTasksOverDue");
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "( julianday(strftime('%Y-%m-%d','now'),'localtime')  -  julianday( strftime('%Y-%m-%d', due_date),'localtime')  ) >0 and status!=1", null, null, null, null );
+		
+		List<Task> taskList = resultSetToTaskList(c);
+		
+		c.close();
+		db.close();
+		return taskList;
+	}
+	
+	public List<Task> getTasksNoDueDate() {
+		
+		Log.i(CloudTodo.tag, "getTasksNoDueDate");
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, null );
+		
+		List<Task> taskList = resultSetToTaskList(c);
+		
+		c.close();
+		db.close();
+		return taskList;
+	}
+	
+	private List<Task> resultSetToTaskList( Cursor c) {
+		
+		List<Task> tlist = new ArrayList<Task>();
+		while( c.moveToNext()) {
+			Task task = new Task();
+			task.setId(c.getInt(0));
+			task.setTask(c.getString(1));
+			
+			String strdate = c.getString(2);
+			if ( (strdate != null) && !("null".equalsIgnoreCase(strdate)) ) {
+				try{
+					task.setDueDate(CloudTodo.stringToDate(strdate));
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+				
+			task.setPriority(c.getInt(3));
+			task.setStatus(c.getInt(4));
+			task.setRecurrance(null);
+			tlist.add(task);
+		}
+		
+		return tlist;
+	}
+	
 	public void updateTask ( Task task ) {
 		
-		System.out.println("Uppdating task " + task.getId());
+		Log.i(CloudTodo.tag, "Uppdating task " + task.getId());
 		
 		String sql="UPDATE CLOUDTODO_TASKS SET " +
 					"TASK='"+task.getTask()+"', " +
@@ -92,111 +195,6 @@ public class DataStore {
 		SQLiteDatabase db = helper.getWritableDatabase();
 		db.execSQL(sql);
 		db.close();
-	}
-	
-	public List<Task> getAllTasks() {
-		
-		SQLiteDatabase db = helper.getReadableDatabase();
-		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , null, null, null, null, null );
-		
-		List<Task> tlist = new ArrayList<Task>();
-		
-		while( c.moveToNext()) {
-			Task task = new Task();
-			task.setId(c.getInt(0));
-			task.setTask(c.getString(1));
-			
-			String strdate = c.getString(2);
-			if ( (strdate != null) && !("null".equalsIgnoreCase(strdate)) ) {
-				try{
-					task.setDueDate(CloudTodo.stringToDate(strdate));
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-				
-			task.setPriority(c.getInt(3));
-			task.setStatus(c.getInt(4));
-			task.setRecurrance(null);
-			tlist.add(task);
-			System.out.println(task);
-		}
-		
-		c.close();
-		db.close();
-		return tlist;
-	}
-	
-	public List<Task> getTasksDueToday() {
-		
-		SQLiteDatabase db = helper.getReadableDatabase();
-		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\')", null, null, null, null );
-		
-		List<Task> tlist = new ArrayList<Task>();
-		
-		while( c.moveToNext()) {
-			Task task = new Task();
-			task.setId(c.getInt(0));
-			task.setTask(c.getString(1));
-			
-			String strdate = c.getString(2);
-			if ( (strdate != null) && !("null".equalsIgnoreCase(strdate)) ) {
-				try{
-					task.setDueDate(CloudTodo.stringToDate(strdate));
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-				
-			task.setPriority(c.getInt(3));
-			task.setStatus(c.getInt(4));
-			task.setRecurrance(null);
-			tlist.add(task);
-			System.out.println(task);
-		}
-		
-		c.close();
-		db.close();
-		return tlist;
-	}
-	
-	public List<Task> getTasksDueTomorrow() {
-		
-		SQLiteDatabase db = helper.getReadableDatabase();
-		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, null );
-		
-		List<Task> tlist = new ArrayList<Task>();
-		
-		while( c.moveToNext()) {
-			Task task = new Task();
-			task.setId(c.getInt(0));
-			task.setTask(c.getString(1));
-			
-			String strdate = c.getString(2);
-			if ( (strdate != null) && !("null".equalsIgnoreCase(strdate)) ) {
-				try{
-					task.setDueDate(CloudTodo.stringToDate(strdate));
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-				
-			task.setPriority(c.getInt(3));
-			task.setStatus(c.getInt(4));
-			task.setRecurrance(null);
-			tlist.add(task);
-			System.out.println(task);
-		}
-		
-		c.close();
-		db.close();
-		return tlist;
 	}
 	
 	public void deleteTasks( List<Task> taskList) {

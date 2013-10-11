@@ -3,6 +3,7 @@ package com.sj.cloudtodo.ui.adapters;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,23 +37,14 @@ public class TasksListAdapter extends ArrayAdapter<Task> {
 		TextView txtName = (TextView)v.findViewById(R.id.text_list_item_tasks);
 		txtName.setText( task.getTask() );
 		
+		if ( task.isOverDue() ) {
+			txtName.setTextColor(Color.RED);
+		}
+		else
+			txtName.setTextColor(Color.WHITE);
+		
 		final CheckBox checkCompleted = (CheckBox) v.findViewById(R.id.check_task_list_item);
-		checkCompleted.setChecked(task.isComplete());
-		
-//		checkCompleted.setOnCheckedChangeListener( new OnCheckedChangeListener() {
-//			
-//			@Override
-//			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//				DataStore dataStore = new DataStore(getContext());
-//				if ( isChecked ) 
-//					task.setStatus(1);
-//				else
-//					task.setStatus(0);
-//				
-//				dataStore.updateTask(task);
-//			}
-//		});
-		
+		checkCompleted.setChecked(task.isComplete());		
 		checkCompleted.setOnClickListener( new OnClickListener() {
 			
 			@Override
@@ -60,9 +52,9 @@ public class TasksListAdapter extends ArrayAdapter<Task> {
 				
 				DataStore dataStore = new DataStore(getContext());
 				if ( checkCompleted.isChecked() ) 
-					task.setStatus(1);
+					task.setStatus(Task.STATUS_COMPLETE);
 				else
-					task.setStatus(0);
+					task.setStatus(Task.STATUS_INCOMPLETE);
 				
 				dataStore.updateTask(task);
 			}

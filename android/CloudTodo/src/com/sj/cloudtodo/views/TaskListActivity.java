@@ -56,7 +56,6 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 				i.putExtra("task", t);
 
 				startActivityForResult( i, REQUEST_MODIFY_TASK_DETAIL);
-  
         	}
 		});
         
@@ -75,20 +74,10 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
         
         OnNavigationListener callback = new ActionBar.OnNavigationListener() {
         	
-        	String[] strings = getResources().getStringArray(R.array.action_list);
-        	
         	@Override
         	public boolean onNavigationItemSelected(int itemPosition,
         			long itemId) {
-        		if ( "All".equalsIgnoreCase(strings[itemPosition]) ) {
-        			loadTasksAll();
-        		}
-        		else if ( "Today".equalsIgnoreCase(strings[itemPosition]) ) {
-        			loadTasksToday();
-        		}
-        		else if ( "Tomorrow".equalsIgnoreCase(strings[itemPosition]) ) {
-        			loadTasksTomorrow();
-        		}
+        		loadTaskList();
         		return true;
         	}
         };
@@ -96,14 +85,15 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
         actionBar.setListNavigationCallbacks(mSpinnerAdapter, callback);
 	}
 	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	
+	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//TODO?
-		loadTasksToday();
-//		ActionBar actionBar = getActionBar();
-//		System.out.println(actionBar.getSelectedNavigationIndex());
+		loadTaskList();
 	}
 	
 	@Override
@@ -146,24 +136,30 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 		adapter.notifyDataSetChanged();
 	}
 	
-	private void loadTasksToday() {
-		DataStore d = new DataStore(this);
-		tasks.clear();
-		tasks.addAll(d.getTasksDueToday());
-		adapter.notifyDataSetChanged();
-	}
 	
-	private void loadTasksAll() {
+	/*
+	 * Loads tasks into the list based on the selected filter
+	 */
+	private void loadTaskList() {
+		
 		DataStore d = new DataStore(this);
 		tasks.clear();
-		tasks.addAll(d.getAllTasks());
-		adapter.notifyDataSetChanged();
-	}
-	
-	private void loadTasksTomorrow() {
-		DataStore d = new DataStore(this);
-		tasks.clear();
-		tasks.addAll(d.getTasksDueTomorrow());
+		
+		String[] strings = getResources().getStringArray(R.array.action_list);
+		
+		int selectedFilter = getActionBar().getSelectedNavigationIndex();
+		
+		if ( "Today".equalsIgnoreCase(strings[selectedFilter]) ) {
+			tasks.addAll(d.getTasksDueToday());
+			tasks.addAll(d.getTasksOverDue());
+		}
+		else if ( "All".equalsIgnoreCase(strings[selectedFilter]) ) {
+			tasks.addAll(d.getAllTasks());
+		}
+		else if ( "Tomorrow".equalsIgnoreCase(strings[selectedFilter]) ) {
+			tasks.addAll(d.getTasksDueTomorrow());
+		}
+		
 		adapter.notifyDataSetChanged();
 	}
 	

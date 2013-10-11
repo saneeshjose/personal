@@ -6,6 +6,7 @@ import java.util.Date;
 public class CloudTodo {
 	public static final String oldDateFormat = "yyyy-MM-dd HH:mm";
 	public static final String dateFormat = "yyyy-MM-dd";
+	public static final String tag = "CloudTodo";
 	
 	public static Date stringToDate(String dateString) throws Exception {
 		
