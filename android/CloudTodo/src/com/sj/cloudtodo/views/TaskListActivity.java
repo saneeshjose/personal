@@ -1,6 +1,7 @@
 package com.sj.cloudtodo.views;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +27,7 @@ import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 
 import com.sj.cloudtodo.R;
+import com.sj.cloudtodo.common.CloudTodo;
 import com.sj.cloudtodo.db.DataStore;
 import com.sj.cloudtodo.model.Task;
 import com.sj.cloudtodo.ui.adapters.TasksListAdapter;
@@ -32,9 +35,100 @@ import com.sj.cloudtodo.views.AddTaskDialog.AddTaskDialogListener;
 
 public class TaskListActivity  extends FragmentActivity implements AddTaskDialogListener {
 	
-	private List<Task> tasks;
 	private TasksListAdapter adapter ;
+	private final String FILTER_ALL = "All";
+	private final String FILTER_TODAY = "Today";
+	
+	private final String FILTER_TOMORROW = "Tomorrow";
 	private ListView list;
+	private List<Task> tasks;
+	
+	private void addNewTask ( String taskName ) {
+		Task task = new Task();
+		task.setTask(taskName);
+		
+		task.setDueDate(new Date());
+		tasks.add(task);
+		
+		DataStore d = new DataStore(this);
+		d.saveTask(task);
+	}
+	
+	private void deleteTask( Task task ) {
+		
+		DataStore d = new DataStore(this);
+		d.deleteTask(task);
+		tasks.remove(task);
+		adapter.notifyDataSetChanged();
+	}
+	
+	private String getActiveFilter() {
+		String[] strings = getResources().getStringArray(R.array.action_list);
+		int selectedFilter = getActionBar().getSelectedNavigationIndex();
+		return strings[selectedFilter];
+	}
+	
+	/*
+	 * Loads tasks into the list based on the selected filter
+	 */
+	private void loadTaskList() {
+		
+		DataStore d = new DataStore(this);
+		tasks.clear();
+		
+		String activeFilter = getActiveFilter();
+		
+		if ( FILTER_TODAY.equalsIgnoreCase(activeFilter) ) {
+			tasks.addAll(d.getTasksDueToday());
+			tasks.addAll(d.getTasksOverDue());
+		}
+		else if ( FILTER_ALL.equalsIgnoreCase(activeFilter) ) {
+			tasks.addAll(d.getAllTasks());
+		}
+		else if ( FILTER_TOMORROW.equalsIgnoreCase(activeFilter) ) {
+			tasks.addAll(d.getTasksDueTomorrow());
+		}
+		else {
+			Log.e(CloudTodo.tag, "Unknown filter selected!");
+		}
+		
+		adapter.notifyDataSetChanged();
+	}
+	
+	private void moveToTomorrow( Task task ) {
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		task.setDueDate(cal.getTime());
+		
+		DataStore d = new DataStore(this);
+		d.updateTask(task);
+		
+		tasks.remove(task);
+		adapter.notifyDataSetChanged();
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		Task task = (Task)list.getItemAtPosition(info.position);
+		
+		switch ( item.getItemId()) {
+		
+		case R.id.menu_context_activity_tasklist_delete :
+			deleteTask(task);
+			return true;
+			
+		case R.id.menu_context_activity_tasklist_tomorrow :
+			moveToTomorrow(task);
+			return true;
+
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,21 +185,33 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 	}
 	
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-	
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context_menu_activity_task_list, menu);
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		loadTaskList();
-	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_activity_task_list, menu);
         return true;
 	}
+	
+	@Override
+	public void onDialogNegativeClick(DialogFragment dialog) {
+	
+	}
+	
+	@Override
+	public void onDialogPositiveClick(DialogFragment dialog) {
+		String taskName = ((AddTaskDialog) dialog).getTaskName();
+		addNewTask(taskName);
+		adapter.notifyDataSetChanged();
+	}
+	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,83 +227,14 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 		return false;
 	}
 	
-	
 	@Override
-	public void onDialogNegativeClick(DialogFragment dialog) {
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 	
 	}
 	
 	@Override
-	public void onDialogPositiveClick(DialogFragment dialog) {
-		String taskName = ((AddTaskDialog) dialog).getTaskName();
-		Task task = new Task();
-		task.setTask(taskName);
-		task.setDueDate(new Date());
-		tasks.add(task);
-		
-		DataStore d = new DataStore(this);
-		d.saveTask(task);
-		
-		adapter.notifyDataSetChanged();
-	}
-	
-	
-	/*
-	 * Loads tasks into the list based on the selected filter
-	 */
-	private void loadTaskList() {
-		
-		DataStore d = new DataStore(this);
-		tasks.clear();
-		
-		String[] strings = getResources().getStringArray(R.array.action_list);
-		
-		int selectedFilter = getActionBar().getSelectedNavigationIndex();
-		
-		if ( "Today".equalsIgnoreCase(strings[selectedFilter]) ) {
-			tasks.addAll(d.getTasksDueToday());
-			tasks.addAll(d.getTasksOverDue());
-		}
-		else if ( "All".equalsIgnoreCase(strings[selectedFilter]) ) {
-			tasks.addAll(d.getAllTasks());
-		}
-		else if ( "Tomorrow".equalsIgnoreCase(strings[selectedFilter]) ) {
-			tasks.addAll(d.getTasksDueTomorrow());
-		}
-		else if ( "Unplanned".equalsIgnoreCase(strings[selectedFilter]) ) {
-			tasks.addAll(d.getTasksDueTomorrow());
-		}
-		
-		adapter.notifyDataSetChanged();
-	}
-	
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.context_menu_activity_task_list, menu);
-	}
-	
-	@Override
-	public boolean onContextItemSelected(MenuItem item) {
-		
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
-		
-		switch ( item.getItemId()) {
-		
-		case R.id.menu_context_activity_tasklist_delete :
-			DataStore d = new DataStore(this);
-			Task task = (Task)list.getItemAtPosition(info.position);
-			d.deleteTask(task);
-			tasks.remove(task);
-			adapter.notifyDataSetChanged();
-			
-			return true;
-
-		default:
-			return super.onContextItemSelected(item);
-		}
+	protected void onResume() {
+		super.onResume();
+		loadTaskList();
 	}
 }

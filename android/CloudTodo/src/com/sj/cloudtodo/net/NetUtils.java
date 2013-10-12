@@ -20,6 +20,26 @@ import com.sj.cloudtodo.model.User;
 
 public class NetUtils {
 	
+	private String getServerUrl() {
+		return "http://10.0.2.2:8888";
+//		return "http://policyapp-msproject.appspot.com";
+	}
+	
+	public User getUserInfo( String userId ) throws Exception {
+		Map<String,String> parameters = new HashMap<String, String>();
+		
+		parameters.put("userid", userId);
+		parameters.put("action", "getuser");
+		String json = postAuthRequest(parameters);
+		
+		Gson gson = new Gson();
+		return gson.fromJson(json, User.class);
+	}
+	
+	public String postAuthRequest( Map<String, String> parameters ) throws Exception {
+		return postRequest(getServerUrl()+"/services/auth", parameters);
+	}
+	
 	public String postRequest( String endpoint,  Map<String, String> parameters ) throws Exception{
 		
 		HttpClient client = new DefaultHttpClient();
@@ -46,26 +66,6 @@ public class NetUtils {
 		client.getConnectionManager().shutdown();
 		
 		return response;
-	}
-	
-	public String postAuthRequest( Map<String, String> parameters ) throws Exception {
-		return postRequest(getServerUrl()+"/services/auth", parameters);
-	}
-	
-	private String getServerUrl() {
-		return "http://10.0.2.2:8888";
-//		return "http://policyapp-msproject.appspot.com";
-	}
-	
-	public User getUserInfo( String userId ) throws Exception {
-		Map<String,String> parameters = new HashMap<String, String>();
-		
-		parameters.put("userid", userId);
-		parameters.put("action", "getuser");
-		String json = postAuthRequest(parameters);
-		
-		Gson gson = new Gson();
-		return gson.fromJson(json, User.class);
 	}
 
 }

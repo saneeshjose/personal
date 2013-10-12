@@ -16,63 +16,22 @@ import com.sj.cloudtodo.model.User;
 
 public class DataStore {
 	
-	private final String SHARED_PREF_USER = "user.info";
-	private final String STR_USER_ID = "user.info.id";
-	private final String STR_USER_NAME = "user.info.name";
-	private final String STR_USER_EMAIL = "user.info.email";
-	
 	private Context context;
 	private DatabaseHelper helper;
+	private final String SHARED_PREF_USER = "user.info";
+	private final String STR_USER_EMAIL = "user.info.email";
+	
+	private final String STR_USER_ID = "user.info.id";
+	private final String STR_USER_NAME = "user.info.name";
 	
 	public DataStore( Context context) {
 		this.context = context;
 		this.helper = new DatabaseHelper(context);
 	}
 	
-	public void saveUserId( String userId) {
-		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
-		Editor e = s.edit();
-		e.putString(STR_USER_ID, userId);
-		e.commit();
-	}
-	
-	public String getUserId () {
-		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
-		return s.getString(STR_USER_ID, null);
-	}
-	
-	public User getUserInfo() {
+	public void deleteTask( Task task) {
 		
-		User user = new User();
-		
-		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
-		
-		user.setEmail(s.getString(STR_USER_EMAIL, null));
-		user.setName(s.getString(STR_USER_NAME, ""));
-		
-		return user;
-	}
-	
-	public void saveUserInfo( User user ) {
-		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
-		Editor e = s.edit();
-		e.putString(STR_USER_EMAIL, user.getEmail());
-		e.putString(STR_USER_NAME, user.getName());
-		e.commit();
-	}
-	
-	public void saveTask ( Task task ) {
-		
-		String recurrance_fk = task.isRecurring()?task.getRecurrance().getId():"";
-		
-		
-		String sql="INSERT INTO CLOUDTODO_TASKS (TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK) VALUES (" +
-				"'"+task.getTask()+"'," 
-				+"'"+CloudTodo.dateToString(task.getDueDate())+"',"
-				+task.getPriority()+","
-				+task.getStatus()+","
-				+"'"+recurrance_fk+"'"+
-				")";
+		String sql = "DELETE FROM CLOUDTODO_TASKS WHERE ID=" + task.getId();
 		
 		SQLiteDatabase db = helper.getWritableDatabase();
 		db.execSQL(sql);
@@ -124,6 +83,21 @@ public class DataStore {
 		return taskList;
 	}
 	
+	public List<Task> getTasksNoDueDate() {
+		
+		Log.i(CloudTodo.tag, "getTasksNoDueDate");
+		
+		SQLiteDatabase db = helper.getReadableDatabase();
+		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, null );
+		
+		List<Task> taskList = resultSetToTaskList(c);
+		
+		c.close();
+		db.close();
+		return taskList;
+	}
+	
 	public List<Task> getTasksOverDue() {
 		
 		Log.i(CloudTodo.tag, "getTasksOverDue");
@@ -139,19 +113,21 @@ public class DataStore {
 		return taskList;
 	}
 	
-	public List<Task> getTasksNoDueDate() {
+	public String getUserId () {
+		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
+		return s.getString(STR_USER_ID, null);
+	}
+	
+	public User getUserInfo() {
 		
-		Log.i(CloudTodo.tag, "getTasksNoDueDate");
+		User user = new User();
 		
-		SQLiteDatabase db = helper.getReadableDatabase();
-		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, null );
+		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
 		
-		List<Task> taskList = resultSetToTaskList(c);
+		user.setEmail(s.getString(STR_USER_EMAIL, null));
+		user.setName(s.getString(STR_USER_NAME, ""));
 		
-		c.close();
-		db.close();
-		return taskList;
+		return user;
 	}
 	
 	private List<Task> resultSetToTaskList( Cursor c) {
@@ -181,6 +157,39 @@ public class DataStore {
 		return tlist;
 	}
 	
+	public void saveTask ( Task task ) {
+		
+		String recurrance_fk = task.isRecurring()?task.getRecurrance().getId():"";
+		
+		
+		String sql="INSERT INTO CLOUDTODO_TASKS (TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK) VALUES (" +
+				"'"+task.getTask()+"'," 
+				+"'"+CloudTodo.dateToString(task.getDueDate())+"',"
+				+task.getPriority()+","
+				+task.getStatus()+","
+				+"'"+recurrance_fk+"'"+
+				")";
+		
+		SQLiteDatabase db = helper.getWritableDatabase();
+		db.execSQL(sql);
+		db.close();
+	}
+	
+	public void saveUserId( String userId) {
+		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
+		Editor e = s.edit();
+		e.putString(STR_USER_ID, userId);
+		e.commit();
+	}
+	
+	public void saveUserInfo( User user ) {
+		SharedPreferences s = context.getSharedPreferences(SHARED_PREF_USER, 0);
+		Editor e = s.edit();
+		e.putString(STR_USER_EMAIL, user.getEmail());
+		e.putString(STR_USER_NAME, user.getName());
+		e.commit();
+	}
+	
 	public void updateTask ( Task task ) {
 		
 		Log.i(CloudTodo.tag, "Uppdating task " + task.getId());
@@ -192,14 +201,7 @@ public class DataStore {
 					"STATUS="+task.getStatus()+" " +
 					"WHERE ID="+task.getId()+"";
 		
-		SQLiteDatabase db = helper.getWritableDatabase();
-		db.execSQL(sql);
-		db.close();
-	}
-	
-	public void deleteTask( Task task) {
-		
-		String sql = "DELETE FROM CLOUDTODO_TASKS WHERE ID=" + task.getId();
+		Log.i( CloudTodo.tag, sql);
 		
 		SQLiteDatabase db = helper.getWritableDatabase();
 		db.execSQL(sql);

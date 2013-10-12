@@ -26,6 +26,17 @@ public class LoginActivity extends Activity {
 	
 	private NetUtils utils = new NetUtils();
 	
+	private String authenticate ( String email, String password ) throws Exception {
+		
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("action", "signin");
+		parameters.put("email", email);
+		parameters.put("password", password);
+		
+		String response = utils.postAuthRequest(parameters);
+		return response;
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.activity_login);
@@ -93,17 +104,6 @@ public class LoginActivity extends Activity {
 				
 			}
 		});
-	}
-	
-	private String authenticate ( String email, String password ) throws Exception {
-		
-		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("action", "signin");
-		parameters.put("email", email);
-		parameters.put("password", password);
-		
-		String response = utils.postAuthRequest(parameters);
-		return response;
 	}
 	
 	private void showAlert ( String text ) {

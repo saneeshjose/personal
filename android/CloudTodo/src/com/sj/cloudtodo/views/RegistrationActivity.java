@@ -81,6 +81,14 @@ public class RegistrationActivity extends Activity {
 		});
 	}
 	
+	private void showAlert ( String text ) {
+		Builder builder = new Builder(this);
+		AlertDialog alert = builder.create();
+		alert.setTitle("Alert");
+		alert.setMessage(text);
+		alert.show();
+	}
+	
 	/*
 	 * Sign up and return user id
 	 */
@@ -97,14 +105,6 @@ public class RegistrationActivity extends Activity {
 		System.out.println(response);
 		
 		return response;
-	}
-	
-	private void showAlert ( String text ) {
-		Builder builder = new Builder(this);
-		AlertDialog alert = builder.create();
-		alert.setTitle("Alert");
-		alert.setMessage(text);
-		alert.show();
 	}
 
 }

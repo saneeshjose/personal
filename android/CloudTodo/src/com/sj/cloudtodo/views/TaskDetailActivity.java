@@ -78,6 +78,14 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 	}
 	
 	@Override
+	public void onDateSet(DatePicker view, int year, int monthOfYear,
+			int dayOfMonth) {
+		EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
+		String date = String.format("%d-%02d-%02d",year,  (1+monthOfYear), dayOfMonth );
+		textDueDate.setText(date);
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if ( item.getItemId() == R.id.menu_activity_task_detail_save ) {
 			
@@ -105,14 +113,6 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 		}
 		return true;
 		
-	}
-	
-	@Override
-	public void onDateSet(DatePicker view, int year, int monthOfYear,
-			int dayOfMonth) {
-		EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
-		String date = String.format("%d-%02d-%02d",year,  (1+monthOfYear), dayOfMonth );
-		textDueDate.setText(date);
 	}
 	
 }

@@ -9,6 +9,8 @@ public class Task implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	public static final int STATUS_COMPLETE=1;
+	public static final int STATUS_INCOMPLETE=0;
 	private Date dueDate;
 	private int id;
 	private int priority;
@@ -16,8 +18,6 @@ public class Task implements Serializable {
 	private boolean recurring;
 	private int status;
 	private String task;
-	public static final int STATUS_COMPLETE=1;
-	public static final int STATUS_INCOMPLETE=0;
 	
 	public Date getDueDate() {
 		return dueDate;
@@ -47,10 +47,30 @@ public class Task implements Serializable {
 		return status==STATUS_COMPLETE;
 	}
 
+	public boolean isOverDue() {
+		
+		if ( dueDate == null )
+			return false;
+		try{
+			//Remove date portion to enable comparison
+			Date today = CloudTodo.stringToDate( CloudTodo.dateToString(new Date()) );
+			
+			if ( (status!=1) && (dueDate.compareTo(today)<0)  ) {
+				return true;
+			}
+			else
+				return false;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public boolean isRecurring() {
 		return recurring;
 	}
-
+	
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
 	}
@@ -77,26 +97,6 @@ public class Task implements Serializable {
 	
 	public void setTask(String task) {
 		this.task = task;
-	}
-	
-	public boolean isOverDue() {
-		
-		if ( dueDate == null )
-			return false;
-		try{
-			//Remove date portion to enable comparison
-			Date today = CloudTodo.stringToDate( CloudTodo.dateToString(new Date()) );
-			
-			if ( (status!=1) && (dueDate.compareTo(today)<0)  ) {
-				return true;
-			}
-			else
-				return false;
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 	
 	public String toString() {
