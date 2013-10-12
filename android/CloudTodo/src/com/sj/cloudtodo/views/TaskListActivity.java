@@ -47,11 +47,21 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 		Task task = new Task();
 		task.setTask(taskName);
 		
-		task.setDueDate(new Date());
-		tasks.add(task);
+		Date dueDate = new Date();
 		
+		if ( FILTER_TOMORROW.equalsIgnoreCase( getActiveFilter())) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(dueDate);
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+			dueDate = cal.getTime();
+		}
+		
+		task.setDueDate(dueDate);
 		DataStore d = new DataStore(this);
 		d.saveTask(task);
+		
+		tasks.add(task);
+		adapter.notifyDataSetChanged();
 	}
 	
 	private void deleteTask( Task task ) {
@@ -209,7 +219,6 @@ public class TaskListActivity  extends FragmentActivity implements AddTaskDialog
 	public void onDialogPositiveClick(DialogFragment dialog) {
 		String taskName = ((AddTaskDialog) dialog).getTaskName();
 		addNewTask(taskName);
-		adapter.notifyDataSetChanged();
 	}
 	
 	
