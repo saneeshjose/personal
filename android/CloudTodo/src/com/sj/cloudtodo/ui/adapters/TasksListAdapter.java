@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sj.cloudtodo.R;
 import com.sj.cloudtodo.db.DataStore;
@@ -43,7 +44,7 @@ public class TasksListAdapter extends ArrayAdapter<Task> {
 			txtName.setTextColor(Color.WHITE);
 		
 		final CheckBox checkCompleted = (CheckBox) v.findViewById(R.id.check_task_list_item);
-		checkCompleted.setChecked(task.isComplete());		
+		checkCompleted.setChecked(task.isComplete());
 		checkCompleted.setOnClickListener( new OnClickListener() {
 			
 			@Override
@@ -56,6 +57,10 @@ public class TasksListAdapter extends ArrayAdapter<Task> {
 					task.setStatus(Task.STATUS_INCOMPLETE);
 				
 				dataStore.updateTask(task);
+				
+				if ( task.getStatus() == Task.STATUS_COMPLETE ) {
+					Toast.makeText(getContext(), "Congratulation on finishing!", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 		

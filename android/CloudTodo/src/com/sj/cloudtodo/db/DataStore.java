@@ -44,7 +44,7 @@ public class DataStore {
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , null, null, null, null, null );
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , null, null, null, null, "STATUS" );
 		
 		List<Task> taskList = resultSetToTaskList(c);
 		
@@ -59,7 +59,7 @@ public class DataStore {
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\')", null, null, null, null );
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\')", null, null, null, "STATUS" );
 		
 		List<Task> taskList = resultSetToTaskList(c);
 		
@@ -74,7 +74,7 @@ public class DataStore {
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, null );
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, "STATUS" );
 		
 		List<Task> taskList = resultSetToTaskList(c);
 		
@@ -89,7 +89,7 @@ public class DataStore {
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, null );
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "due_date = date(\'now\',\'localtime\', \'+1 day\')", null, null, null, "STATUS" );
 		
 		List<Task> taskList = resultSetToTaskList(c);
 		
@@ -104,7 +104,7 @@ public class DataStore {
 		
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String []cols = new String[]{"ID, TASK, DUE_DATE, PRIORITY, STATUS, RECURRANCE_FK"};
-		Cursor c = db.query("CLOUDTODO_TASKS", cols , "( julianday(strftime('%Y-%m-%d','now'),'localtime')  -  julianday( strftime('%Y-%m-%d', due_date),'localtime')  ) >0 and status!=1", null, null, null, null );
+		Cursor c = db.query("CLOUDTODO_TASKS", cols , "( julianday(strftime('%Y-%m-%d','now'),'localtime')  -  julianday( strftime('%Y-%m-%d', due_date),'localtime')  ) >0 and status!=1", null, null, null, "STATUS" );
 		
 		List<Task> taskList = resultSetToTaskList(c);
 		
