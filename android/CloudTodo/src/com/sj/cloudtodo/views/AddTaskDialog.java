@@ -16,11 +16,7 @@ import com.sj.cloudtodo.R;
 
 public class AddTaskDialog extends DialogFragment {
 	
-	public interface AddTaskDialogListener {
-        public void onDialogNegativeClick(DialogFragment dialog);
-        public void onDialogPositiveClick(DialogFragment dialog);
-    }
-	private AddTaskDialogListener mListener;
+	private DialogListener mListener;
 	
 	private String taskName;
 	
@@ -32,7 +28,7 @@ public class AddTaskDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (AddTaskDialogListener) activity;
+            mListener = (DialogListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement AddTaskDialogListener");

@@ -12,10 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sj.cloudtodo.R;
@@ -47,19 +46,14 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 		else
 			Log.e("CloudTodo", "No extras..");
 		
-		Spinner spinnerFrequency = ( Spinner ) findViewById(R.id.spnFrequency);
-		
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.repeat_frequencies, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerFrequency.setAdapter(adapter);
-		
-		EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
+		LinearLayout layoutDueDate = (LinearLayout) findViewById(R.id.layoutDueDate);
 		if ( task.getDueDate()!=null) {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			TextView textDueDate = (TextView) layoutDueDate.findViewById(R.id.txtSecondaryText);
 			textDueDate.setText(dateFormat.format(task.getDueDate()) );
 		}
 		
-		textDueDate.setOnClickListener( new OnClickListener() {
+		layoutDueDate.setOnClickListener( new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -80,7 +74,8 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear,
 			int dayOfMonth) {
-		EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
+		LinearLayout layoutDueDate = (LinearLayout) findViewById(R.id.layoutDueDate);
+		TextView textDueDate = (TextView) layoutDueDate.findViewById(R.id.txtSecondaryText);
 		String date = String.format("%d-%02d-%02d",year,  (1+monthOfYear), dayOfMonth );
 		textDueDate.setText(date);
 	}
@@ -89,7 +84,11 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if ( item.getItemId() == R.id.menu_activity_task_detail_save ) {
 			
-			EditText textDueDate = (EditText) findViewById(R.id.editDueDate);
+			EditText textTask = (EditText) findViewById(R.id.editTask);
+			task.setTask(textTask.getText().toString());
+			
+			LinearLayout layoutDueDate = (LinearLayout) findViewById(R.id.layoutDueDate);
+			TextView textDueDate = (TextView) layoutDueDate.findViewById(R.id.txtSecondaryText);
 			
 			try{
 				Date date = CloudTodo.stringToDate(textDueDate.getText().toString());
@@ -98,9 +97,6 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 			catch(Exception e) {
 				e.printStackTrace();
 			}
-			
-			EditText textTask = (EditText) findViewById(R.id.editTask);
-			task.setTask(textTask.getText().toString());
 			
 			DataStore dataStore = new DataStore(this);
 			dataStore.updateTask(task);

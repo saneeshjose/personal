@@ -1,85 +1,106 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <EditText
         android:id="@+id/editTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="19dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="18dp"
         android:ems="14"
-        />
+        android:inputType="textMultiLine" />
 
-    <TextView
-        android:id="@+id/txtRepeats"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutRepeats"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editTask"
-        android:layout_below="@+id/editTask"
-        android:layout_marginTop="27dp"
-        android:text="@string/str_activity_task_detail_repeats" 
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="18dp"
+        android:clickable="true"
+        android:orientation="horizontal" >
 
-    <Spinner
-        android:id="@+id/spnFrequency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtRepeats"
-        android:layout_marginLeft="36dp"
-        android:layout_toRightOf="@+id/txtRepeats" />
-    
-     <TextView
-        android:id="@+id/txtDueDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txtRepeats"
-        android:layout_below="@+id/txtRepeats"
-        android:layout_marginTop="49dp"
-        android:text="@string/str_activity_task_detail_start_date"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-     
-    <EditText
-        android:id="@+id/editDueDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtRepeats"
-        android:layout_alignLeft="@+id/spnFrequency"
-        android:layout_alignBaseline="@+id/txtDueDate"
-        android:ems="8"
-        android:editable="false"
-        android:inputType="date" />
-<!-- 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="27dp"
-        android:text="@string/str_activity_task_detail_time"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_alignTop="@+id/textView3"
-        android:ems="10"
-        android:inputType="time" />
+            <TextView
+                android:id="@+id/txtPrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_activity_task_detail_repeats"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/txtEndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView1"
-        android:layout_centerVertical="true"
-        android:text="@string/str_activity_task_detail_end_date"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    -->
+            <TextView
+                android:id="@+id/txtSecondaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:text="None"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="40dip"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_goto_tasks3" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutDueDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="18dp"
+        android:clickable="true"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtPrimaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Due Date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/txtSecondaryText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:text="10/24/2013"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="40dip"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_goto_tasks3" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

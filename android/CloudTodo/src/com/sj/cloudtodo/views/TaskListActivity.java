@@ -13,11 +13,11 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
@@ -31,9 +31,8 @@ import com.sj.cloudtodo.common.CloudTodo;
 import com.sj.cloudtodo.db.DataStore;
 import com.sj.cloudtodo.model.Task;
 import com.sj.cloudtodo.ui.adapters.TasksListAdapter;
-import com.sj.cloudtodo.views.AddTaskDialog.AddTaskDialogListener;
 
-public class TaskListActivity  extends FragmentActivity implements AddTaskDialogListener {
+public class TaskListActivity  extends FragmentActivity implements DialogListener {
 	
 	private TasksListAdapter adapter ;
 	private final String FILTER_ALL = "All";
