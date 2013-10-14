@@ -43,6 +43,10 @@
             android:name="com.sj.cloudtodo.views.TaskDetailActivity"
             android:label="Task Detail" />
         
+        <activity
+            android:name="com.sj.cloudtodo.views.RepeatActivity"
+            android:label="Recurrance" />
+        
         
     </application>
 

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -61,6 +62,16 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 				
 				DatePickerDialog d = new DatePickerDialog(TaskDetailActivity.this, TaskDetailActivity.this, 1900+ today.getYear(), today.getMonth(), today.getDate());
 				d.show();
+			}
+		});
+		
+		LinearLayout layoutRepeats = (LinearLayout) findViewById(R.id.layoutRepeats);
+		layoutRepeats.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent ( TaskDetailActivity.this, RepeatActivity.class);
+				startActivity(intent);
 			}
 		});
 	}
