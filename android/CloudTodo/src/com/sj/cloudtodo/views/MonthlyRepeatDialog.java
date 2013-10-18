@@ -12,7 +12,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.os.Bundle;
 
-public class DayListDialog extends DialogFragment {
+public class MonthlyRepeatDialog extends DialogFragment {
 	
 	private DayListDialogListener listenerCallback;
 	private List<String> selectedDays; 

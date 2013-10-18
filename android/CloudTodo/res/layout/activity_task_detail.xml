@@ -14,16 +14,17 @@
         android:inputType="textMultiLine" />
 
     <LinearLayout
-        android:id="@+id/layoutRepeats"
+        android:id="@+id/layoutDueDateParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="18dp"
-        android:clickable="true"
         android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:orientation="horizontal" >
 
         <LinearLayout
+            android:id="@+id/layoutDueDate"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -33,7 +34,7 @@
                 android:id="@+id/txtPrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_activity_task_detail_repeats"
+                android:text="Due Date"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -41,7 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dip"
-                android:text="None"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
@@ -60,16 +60,17 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutDueDate"
+        android:id="@+id/layoutRepeatsParent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="18dp"
-        android:clickable="true"
         android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:orientation="horizontal" >
 
         <LinearLayout
+            android:id="@+id/layoutRepeats"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -79,7 +80,7 @@
                 android:id="@+id/txtPrimaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Due Date"
+                android:text="@string/str_activity_task_detail_repeats"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -87,7 +88,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dip"
-                android:text="10/24/2013"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
@@ -103,6 +103,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/icon_goto_tasks3" />
         </LinearLayout>
+        
     </LinearLayout>
-
 </LinearLayout>

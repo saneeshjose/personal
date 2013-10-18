@@ -1,6 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layoutRepeatFrequencyWeekly"
+    android:id="@+id/layoutRepeatFrequencyMonthly"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="18dp"
@@ -14,7 +14,7 @@
         android:id="@+id/txtPrimaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="On Days"
+        android:text="On..."
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView

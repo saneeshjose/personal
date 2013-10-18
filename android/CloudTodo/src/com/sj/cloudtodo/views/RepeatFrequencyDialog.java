@@ -1,5 +1,7 @@
 package com.sj.cloudtodo.views;
 
+import com.sj.cloudtodo.model.Recurrance;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,7 +35,13 @@ public class RepeatFrequencyDialog extends DialogFragment {
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Choose a frequency");
-		final CharSequence[] items = new CharSequence[]{"Daily","Weekly", "Monthly","Yearly"};
+		final CharSequence[] items = new CharSequence[]{
+											Recurrance.RECURRANCE_NEVER,
+											Recurrance.RECURRANCE_DAILY, 
+											Recurrance.RECURRANCE_WEEKLY, 
+											Recurrance.RECURRANCE_MONTHLY, 
+											Recurrance.RECURRANCE_YEARLY, 
+										};
 		
 		builder.setItems(items, new OnClickListener() {
 			

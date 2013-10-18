@@ -14,7 +14,6 @@ public class Task implements Serializable {
 	private Date dueDate;
 	private int id;
 	private int priority;
-	private Recurrance recurrance;
 	private boolean recurring;
 	private int status;
 	private String task;
@@ -29,10 +28,6 @@ public class Task implements Serializable {
 
 	public int getPriority() {
 		return priority;
-	}
-
-	public Recurrance getRecurrance() {
-		return recurrance;
 	}
 
 	public int getStatus() {
@@ -81,10 +76,6 @@ public class Task implements Serializable {
 	
 	public void setPriority(int priority) {
 		this.priority = priority;
-	}
-	
-	public void setRecurrance(Recurrance recurrance) {
-		this.recurrance = recurrance;
 	}
 	
 	public void setRecurring(boolean recurring) {

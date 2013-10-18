@@ -58,9 +58,7 @@ public class TaskListActivity  extends FragmentActivity implements DialogListene
 		task.setDueDate(dueDate);
 		DataStore d = new DataStore(this);
 		d.saveTask(task);
-		
-		tasks.add(task);
-		adapter.notifyDataSetChanged();
+		loadTaskList();
 	}
 	
 	private void deleteTask( Task task ) {

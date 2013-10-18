@@ -21,11 +21,13 @@ import android.widget.TextView;
 import com.sj.cloudtodo.R;
 import com.sj.cloudtodo.common.CloudTodo;
 import com.sj.cloudtodo.db.DataStore;
+import com.sj.cloudtodo.model.Recurrance;
 import com.sj.cloudtodo.model.Task;
 
 public class TaskDetailActivity extends FragmentActivity implements OnDateSetListener {
 	
 	private Task task;
+	private Recurrance recurrance;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 			
 			TextView txtTask = (TextView ) findViewById(R.id.editTask);
 			txtTask.setText(task.getTask());
+			initRecurrance();
 		}
 		else
 			Log.e("CloudTodo", "No extras..");
@@ -54,7 +57,8 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 			textDueDate.setText(dateFormat.format(task.getDueDate()) );
 		}
 		
-		layoutDueDate.setOnClickListener( new OnClickListener() {
+		LinearLayout layoutDueDateParent = (LinearLayout) findViewById(R.id.layoutDueDateParent);
+		layoutDueDateParent.setOnClickListener( new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -66,11 +70,22 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 		});
 		
 		LinearLayout layoutRepeats = (LinearLayout) findViewById(R.id.layoutRepeats);
-		layoutRepeats.setOnClickListener( new OnClickListener() {
+		
+		TextView txtFrequency = (TextView ) layoutRepeats.findViewById(R.id.txtSecondaryText);
+		if ( this.recurrance!=null) {
+			txtFrequency.setText( this.recurrance.getFrequency());
+		}
+		else
+			txtFrequency.setText( Recurrance.RECURRANCE_NEVER );
+		
+		LinearLayout layoutRepeatsParent = (LinearLayout) findViewById(R.id.layoutRepeatsParent);
+		layoutRepeatsParent.setOnClickListener( new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent ( TaskDetailActivity.this, RepeatActivity.class);
+				intent.putExtra("task", task);
+				intent.putExtra("recurrance", recurrance);
 				startActivity(intent);
 			}
 		});
@@ -120,6 +135,11 @@ public class TaskDetailActivity extends FragmentActivity implements OnDateSetLis
 		}
 		return true;
 		
+	}
+	
+	private void initRecurrance() {
+		DataStore d = new DataStore(this);
+		this.recurrance = d.getRecurrance(this.task);
 	}
 	
 }
