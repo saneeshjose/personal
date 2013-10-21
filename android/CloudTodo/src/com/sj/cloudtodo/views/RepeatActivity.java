@@ -21,12 +21,18 @@ import android.widget.TextView;
 import com.sj.cloudtodo.R;
 import com.sj.cloudtodo.common.CloudTodo;
 import com.sj.cloudtodo.db.DataStore;
+import com.sj.cloudtodo.model.MonthlyOptionDTO;
 import com.sj.cloudtodo.model.Recurrance;
 import com.sj.cloudtodo.model.Task;
 import com.sj.cloudtodo.views.DayListDialog.DayListDialogListener;
+import com.sj.cloudtodo.views.MonthlyRepeatDialog.MonthlyRepeatDialogListener;
 import com.sj.cloudtodo.views.RepeatFrequencyDialog.RepeatFrequencyDialogListener;
 
-public class RepeatActivity extends Activity implements RepeatFrequencyDialogListener, OnDateSetListener,DayListDialogListener {
+public class RepeatActivity extends Activity implements 
+				RepeatFrequencyDialogListener, 
+				OnDateSetListener,
+				DayListDialogListener,
+				MonthlyRepeatDialogListener {
 	
 	private boolean isCurrentDatePickerStartDate ;
 	
@@ -94,6 +100,8 @@ public class RepeatActivity extends Activity implements RepeatFrequencyDialogLis
 	@Override
 	public void OnFrequencySelected(String frequency) {
 		
+		removeCurrentFrequencyUI();
+		
 		LinearLayout layoutFrequency = (LinearLayout) findViewById(R.id.layoutRepeatFrequency);
 		TextView txtSecondaryText = (TextView) layoutFrequency.findViewById(R.id.txtSecondaryText);
 		txtSecondaryText.setText(frequency);
@@ -103,7 +111,7 @@ public class RepeatActivity extends Activity implements RepeatFrequencyDialogLis
 		
 	}
 	
-	private void removeCurrentFrequencyUI() {
+	private void removeCurrentFrequencyUI( ) {
 		
 		ViewGroup mainLayout = (ViewGroup) findViewById(R.id.repeatfrequencymain);
 
@@ -117,12 +125,25 @@ public class RepeatActivity extends Activity implements RepeatFrequencyDialogLis
 			layoutRepeatEndDate.setVisibility(View.INVISIBLE);
 		}
 		else if ( Recurrance.RECURRANCE_WEEKLY.equalsIgnoreCase(this.recurrance.getFrequency())) {
+			LinearLayout layoutRepeatStartDate = (LinearLayout) findViewById(R.id.layoutRepeatStartDate);
+			LinearLayout layoutRepeatEndDate = (LinearLayout) findViewById(R.id.layoutRepeatEndDate);
+			
+			layoutRepeatStartDate.setVisibility(View.INVISIBLE);
+			layoutRepeatEndDate.setVisibility(View.INVISIBLE);
+			
 			ViewGroup vWeekly = (ViewGroup) mainLayout.findViewById(R.id.layoutRepeatFrequencyWeekly);
 			
 			if ( vWeekly !=null )
 				mainLayout.removeView( vWeekly );
 		}
 		else if ( Recurrance.RECURRANCE_MONTHLY.equalsIgnoreCase(this.recurrance.getFrequency())) {
+			
+			LinearLayout layoutRepeatStartDate = (LinearLayout) findViewById(R.id.layoutRepeatStartDate);
+			LinearLayout layoutRepeatEndDate = (LinearLayout) findViewById(R.id.layoutRepeatEndDate);
+			
+			layoutRepeatStartDate.setVisibility(View.INVISIBLE);
+			layoutRepeatEndDate.setVisibility(View.INVISIBLE);
+			
 			ViewGroup vMonthly = (ViewGroup) mainLayout.findViewById(R.id.layoutRepeatFrequencyMonthly);
 			
 			if ( vMonthly !=null )
@@ -132,18 +153,23 @@ public class RepeatActivity extends Activity implements RepeatFrequencyDialogLis
 	
 	private void inflateSelectedFrequencyUI ( String frequency ) {
 		
-		removeCurrentFrequencyUI();
-		
 		ViewGroup mainLayout = (ViewGroup) findViewById(R.id.repeatfrequencymain);
 		
-		if ( "Daily".equalsIgnoreCase(frequency)) {
+		if ( Recurrance.RECURRANCE_DAILY.equalsIgnoreCase(frequency)) {
 			LinearLayout layoutRepeatStartDate = (LinearLayout) findViewById(R.id.layoutRepeatStartDate);
 			LinearLayout layoutRepeatEndDate = (LinearLayout) findViewById(R.id.layoutRepeatEndDate);
 			
 			layoutRepeatStartDate.setVisibility(View.VISIBLE);
 			layoutRepeatEndDate.setVisibility(View.VISIBLE);
 		}
-		else if ( "Weekly".equalsIgnoreCase(frequency)) {
+		else if ( Recurrance.RECURRANCE_WEEKLY.equalsIgnoreCase(frequency)) {
+			
+			LinearLayout layoutRepeatStartDate = (LinearLayout) findViewById(R.id.layoutRepeatStartDate);
+			LinearLayout layoutRepeatEndDate = (LinearLayout) findViewById(R.id.layoutRepeatEndDate);
+			
+			layoutRepeatStartDate.setVisibility(View.VISIBLE);
+			layoutRepeatEndDate.setVisibility(View.VISIBLE);
+			
 			View v = getLayoutInflater().inflate(R.layout.view_repeat_weekly, mainLayout);
 			
 			LinearLayout layoutRepeatFrequencyWeekly = (LinearLayout) v.findViewById(R.id.layoutRepeatFrequencyWeekly);
@@ -157,16 +183,23 @@ public class RepeatActivity extends Activity implements RepeatFrequencyDialogLis
 			});
 		}
 		
-		else if ( "Monthly".equalsIgnoreCase(frequency)) {
-			View v = getLayoutInflater().inflate(R.layout.view_repeat_weekly, mainLayout);
+		else if ( Recurrance.RECURRANCE_MONTHLY.equalsIgnoreCase(frequency)) {
+			
+			LinearLayout layoutRepeatStartDate = (LinearLayout) findViewById(R.id.layoutRepeatStartDate);
+			LinearLayout layoutRepeatEndDate = (LinearLayout) findViewById(R.id.layoutRepeatEndDate);
+			
+			layoutRepeatStartDate.setVisibility(View.VISIBLE);
+			layoutRepeatEndDate.setVisibility(View.VISIBLE);
+			
+			View v = getLayoutInflater().inflate(R.layout.view_repeat_monthly, mainLayout);
 			
 			LinearLayout layoutRepeatFrequencyMonthly = (LinearLayout) v.findViewById(R.id.layoutRepeatFrequencyMonthly);
 			layoutRepeatFrequencyMonthly.setOnClickListener( new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					DialogFragment dialogFragment = new DayListDialog();
-					dialogFragment.show(getFragmentManager(),"DayListDialog");
+					DialogFragment dialogFragment = new MonthlyRepeatDialog();
+					dialogFragment.show(getFragmentManager(),"MonthlyRepeatDialog");
 				}
 			});
 		}
@@ -259,6 +292,25 @@ public class RepeatActivity extends Activity implements RepeatFrequencyDialogLis
 		LinearLayout layoutFrequency = (LinearLayout) findViewById(R.id.layoutRepeatFrequency);
 		TextView txtSecondaryText = (TextView) layoutFrequency.findViewById(R.id.txtSecondaryText);
 		txtSecondaryText.setText(recurrance.getFrequency());
+	}
+
+	@Override
+	public void OnMonthlyOptionSelected( MonthlyOptionDTO option ) {
+		
+		String displayText = "";
+		if ( option.getSelectedOption() == MonthlyOptionDTO.MONTHLY_OPTION_DAY ) {
+			displayText = "On day " + option.getDay();
+		}
+		else if ( option.getSelectedOption() == MonthlyOptionDTO.MONTHLY_OPTION_FIRST_DAY ) {
+			displayText = "First day";
+		}
+		else if ( option.getSelectedOption() == MonthlyOptionDTO.MONTHLY_OPTION_LAST_DAY ) {
+			displayText = "Last day";
+		}
+		LinearLayout layoutRepeatFrequencyMonthly = (LinearLayout) findViewById(R.id.layoutRepeatFrequencyMonthly);
+		TextView txtSecondaryText = (TextView)layoutRepeatFrequencyMonthly.findViewById(R.id.txtSecondaryText);
+		txtSecondaryText.setText( displayText );
+		
 	}
 
 }

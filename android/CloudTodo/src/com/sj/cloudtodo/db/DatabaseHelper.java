@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			")";
 
 	public DatabaseHelper(Context context) {
-		super(context, "cloudtodo.db", null, 2);
+		super(context, "cloudtodo.db", null, 3);
 	}
 
 	@Override
@@ -40,6 +40,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		
 		if ( oldVersion == 1 && newVersion == 2 ) {
 			db.execSQL("update cloudtodo_tasks set due_date=date(due_date)");
+			Log.i("CloudTodo", "Upgrade completed" );
+		}
+		else if ( oldVersion == 2 && newVersion == 3 ) {
+//			db.execSQL(SQL_DB_SETUP_RECURRANCE);
 			Log.i("CloudTodo", "Upgrade completed" );
 		}
 		else

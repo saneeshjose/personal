@@ -4,4 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/rdOnDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="On day" />
+
+        <EditText
+            android:id="@+id/editDay"
+            android:layout_width="30dip"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <RadioButton
+        android:id="@+id/rdOnFirstDay"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="On first day" />
+
+    <RadioButton
+        android:id="@+id/rdOnLastDay"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="On last day" />
+
 </LinearLayout>
