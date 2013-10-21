@@ -1,5 +1,6 @@
 package com.sj.cloudtodo.views;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,11 @@ public class RepeatActivity extends Activity implements
 				DayListDialogListener,
 				MonthlyRepeatDialogListener {
 	
-	private boolean isCurrentDatePickerStartDate ;
+	private int currentDatePicker;
+	private int PICKER_START_DATE = 1;
+	private int PICKER_END_DATE = 2;
+	private int PICKER_YEARLY_DATE = 3;
+	
 	
 	private Recurrance recurrance;
 	private Task task;
@@ -76,7 +81,7 @@ public class RepeatActivity extends Activity implements
 			@Override
 			public void onClick(View v) {
 				Date today = new Date();
-				isCurrentDatePickerStartDate = true;
+				currentDatePicker = PICKER_START_DATE;
 				DatePickerDialog d = new DatePickerDialog(RepeatActivity.this, RepeatActivity.this, 1900+ today.getYear(), today.getMonth(), today.getDate());
 				d.show();
 			}
@@ -88,7 +93,7 @@ public class RepeatActivity extends Activity implements
 			@Override
 			public void onClick(View v) {
 				Date today = new Date();
-				isCurrentDatePickerStartDate = false;
+				currentDatePicker = PICKER_END_DATE;
 				DatePickerDialog d = new DatePickerDialog(RepeatActivity.this, RepeatActivity.this, 1900+ today.getYear(), today.getMonth(), today.getDate());
 				d.show();
 			}
@@ -149,6 +154,19 @@ public class RepeatActivity extends Activity implements
 			if ( vMonthly !=null )
 				mainLayout.removeView( vMonthly );
 		}
+		else if ( Recurrance.RECURRANCE_YEARLY.equalsIgnoreCase(this.recurrance.getFrequency())) {
+			
+			LinearLayout layoutRepeatStartDate = (LinearLayout) findViewById(R.id.layoutRepeatStartDate);
+			LinearLayout layoutRepeatEndDate = (LinearLayout) findViewById(R.id.layoutRepeatEndDate);
+			
+			layoutRepeatStartDate.setVisibility(View.INVISIBLE);
+			layoutRepeatEndDate.setVisibility(View.INVISIBLE);
+			
+			ViewGroup vYearly = (ViewGroup) mainLayout.findViewById(R.id.layoutRepeatFrequencyYearly);
+			
+			if ( vYearly !=null )
+				mainLayout.removeView( vYearly );
+		}
 	}
 	
 	private void inflateSelectedFrequencyUI ( String frequency ) {
@@ -203,6 +221,22 @@ public class RepeatActivity extends Activity implements
 				}
 			});
 		}
+		else if ( Recurrance.RECURRANCE_YEARLY.equalsIgnoreCase(frequency)) {
+			
+			View v = getLayoutInflater().inflate(R.layout.view_repeat_yearly, mainLayout);
+			
+			LinearLayout layoutRepeatFrequencyYearly = (LinearLayout) v.findViewById(R.id.layoutRepeatFrequencyYearly);
+			layoutRepeatFrequencyYearly.setOnClickListener( new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Date today = new Date();
+					currentDatePicker = PICKER_YEARLY_DATE;
+					DatePickerDialog d = new DatePickerDialog(RepeatActivity.this, RepeatActivity.this, 1900+ today.getYear(), today.getMonth(), today.getDate());
+					d.show();
+				}
+			});
+		}
 		
 	}
 	
@@ -212,7 +246,7 @@ public class RepeatActivity extends Activity implements
 		
 		String date = String.format("%d-%02d-%02d",year,  (1+monthOfYear), dayOfMonth );
 		
-		if ( isCurrentDatePickerStartDate ) {
+		if ( currentDatePicker == PICKER_START_DATE ) {
 			LinearLayout layoutDueDate = (LinearLayout) findViewById(R.id.layoutRepeatStartDate);
 			TextView textDueDate = (TextView) layoutDueDate.findViewById(R.id.txtSecondaryText);
 			textDueDate.setText(date);
@@ -223,7 +257,7 @@ public class RepeatActivity extends Activity implements
 				e.printStackTrace();
 			}
 		}
-		else {
+		else if ( currentDatePicker == PICKER_END_DATE ) {
 			LinearLayout layoutDueDate = (LinearLayout) findViewById(R.id.layoutRepeatEndDate);
 			TextView textDueDate = (TextView) layoutDueDate.findViewById(R.id.txtSecondaryText);
 			textDueDate.setText(date);
@@ -234,6 +268,22 @@ public class RepeatActivity extends Activity implements
 			catch(Exception e) {
 				e.printStackTrace();
 			}
+		}
+		else if ( currentDatePicker == PICKER_YEARLY_DATE ) {
+			LinearLayout layoutDueDate = (LinearLayout) findViewById(R.id.layoutRepeatFrequencyYearly);
+			TextView textDueDate = (TextView) layoutDueDate.findViewById(R.id.txtSecondaryText);
+			
+			try{
+				Date d = CloudTodo.stringToDate(date);
+				SimpleDateFormat df = new SimpleDateFormat("MMM-dd");
+				String yearlyDate = df.format(d);
+				textDueDate.setText(yearlyDate);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			
 		}
 		
 	}

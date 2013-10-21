@@ -1,0 +1,28 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutRepeatFrequencyYearly"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="18dp"
+    android:layout_marginTop="18dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:orientation="vertical" >
+    
+
+    <TextView
+        android:id="@+id/txtPrimaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="On..."
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/txtSecondaryText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dip"
+        android:text="None"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</LinearLayout>
